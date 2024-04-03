@@ -30,11 +30,11 @@ export default buildConfig({
 					},
 				})
 				const users = result.docs
-				let emails = []
 				let names = []
-				users.forEach(async (user) => {
-					emails.push(user.email)
+				let emails = []
+				users.forEach((user) => {
 					names.push(user.name)
+					emails.push(user.email)
 				})
 				try {
 					req.payload.sendEmail({
