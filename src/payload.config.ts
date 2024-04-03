@@ -19,7 +19,7 @@ export default buildConfig({
 	endpoints: [
 		{
 			path: '/notify-two-weeks',
-			method: 'post',
+			method: 'get',
 			handler: async (req, res, next) => {
 				const result = await req.payload.find({
 					collection: 'registered-users',
