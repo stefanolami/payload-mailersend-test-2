@@ -30,22 +30,24 @@ export default buildConfig({
 					},
 				})
 				const users = result.docs
+				let emails = []
+				let names = []
 				users.forEach(async (user) => {
-					const email = user.email
-					const name = user.name
-					try {
-						req.payload.sendEmail({
-							to: ['stefanolami90@gmail.com'],
-							from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
-							subject: 'Missing payments notification',
-							text: `the following users have not been confirmed yet: ${name} - ${email}`,
-						})
-						res.status(200).send(`Email sent to ${email}`)
-					} catch (error) {
-						console.error('Error sending email:', error)
-						res.status(500).send('Error sending email')
-					}
+					emails.push(user.email)
+					names.push(user.name)
 				})
+				try {
+					req.payload.sendEmail({
+						to: ['stefanolami90@gmail.com'],
+						from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
+						subject: 'Missing payments notification',
+						text: `the following users have not been confirmed yet: ${names.join()} - ${emails.join()}`,
+					})
+					res.status(200).send(`Email sent`)
+				} catch (error) {
+					console.error('Error sending email:', error)
+					res.status(500).send('Error sending email')
+				}
 			},
 		},
 	],

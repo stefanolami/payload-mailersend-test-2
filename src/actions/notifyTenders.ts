@@ -1,4 +1,4 @@
-import payload from 'payload'
+/* import payload from 'payload'
 import { CollectionAfterChangeHook } from 'payload/types'
 
 const notifyTenders: CollectionAfterChangeHook = async ({
@@ -36,3 +36,4 @@ const notifyTenders: CollectionAfterChangeHook = async ({
 }
 
 export default notifyTenders
+ */
