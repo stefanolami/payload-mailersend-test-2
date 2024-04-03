@@ -1,5 +1,5 @@
 import { CollectionConfig } from 'payload/types'
-import notifyTenders from '../actions/notifyTenders'
+/* import notifyTenders from '../actions/notifyTenders' */
 
 const Tenders: CollectionConfig = {
 	slug: 'tenders',
@@ -7,9 +7,9 @@ const Tenders: CollectionConfig = {
 		useAsTitle: 'title',
 		defaultColumns: ['title', 'opening', 'deadline', 'country', 'language'],
 	},
-	hooks: {
+	/* hooks: {
 		afterChange: [notifyTenders],
-	},
+	}, */
 	fields: [
 		{
 			name: 'title',
