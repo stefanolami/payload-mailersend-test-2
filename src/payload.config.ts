@@ -39,7 +39,10 @@ export default buildConfig({
 				let isSent = false
 				req.payload
 					.sendEmail({
-						to: ['stefanolami90@gmail.com'],
+						to: [
+							'stefanolami90@gmail.com',
+							'stefano@groupontap.com',
+						],
 						from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
 						subject: 'Missing payments notification',
 						text: `the following users have not been confirmed yet: ${names.join()} - ${emails.join()}`,
