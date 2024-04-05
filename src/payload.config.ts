@@ -22,6 +22,7 @@ export default buildConfig({
 		{
 			path: '/notify-two-weeks',
 			method: 'get',
+			// @ts-ignore
 			handler: notifyCronJob,
 		},
 	],

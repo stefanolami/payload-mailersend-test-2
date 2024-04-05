@@ -1,7 +1,5 @@
 import usersToStrings from './helpers/usersToStrings'
 
-const handleUsers = () => {}
-
 const notifyCronJob = async (req, res, next) => {
 	const result = await req.payload.find({
 		collection: 'registered-users',
@@ -41,7 +39,7 @@ const notifyCronJob = async (req, res, next) => {
 	let isSent = false
 	req.payload
 		.sendEmail({
-			to: ['stefanolami90feas@gmail.com'],
+			to: ['stefanolami90fs@gmail.com'],
 			from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
 			subject: 'Missing payments notification',
 			text: `the following users are about to be warned: ${usersToStrings(
@@ -54,10 +52,10 @@ Users still frozen: ${usersToStrings(frozenUsers)}.`,
 		.then((response: { accepted: string[]; rejected: string[] }) => {
 			// Add type assertion
 			console.log(response)
-			if (response.accepted?.length > 0) {
+			if (response.accepted.length > 0) {
 				isSent = true
 			}
-			if (response.rejected?.length > 0) {
+			if (response.rejected.length > 0) {
 				console.warn('Email rejected:', response.rejected)
 			}
 		})
@@ -80,4 +78,4 @@ Users still frozen: ${usersToStrings(frozenUsers)}.`,
 		})
 }
 
-/* export default notifyCronJob */
+export default notifyCronJob
