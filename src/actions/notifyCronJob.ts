@@ -91,7 +91,7 @@ const notifyCronJob = async (
 	console.log('Remaining users:', remainingUsers)
 
 	await sendEmail(req, res, {
-		to: ['stefanolami90@gmail.com'],
+		to: ['fdsfsfsd@gmsfdsfsdail.com'],
 		from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
 		subject: 'Missing payments notification',
 		text: `the following users are about to be warned: ${usersToStrings(
