@@ -1,8 +1,8 @@
 import { CollectionConfig } from 'payload/types'
 import confirmFieldHook from '../actions/confirmFieldHook'
 
-const RegisteredUsers: CollectionConfig = {
-	slug: 'registered-users',
+const FrozenUsers: CollectionConfig = {
+	slug: 'frozen-users',
 	access: {
 		read: () => true,
 		create: () => true,
@@ -17,25 +17,6 @@ const RegisteredUsers: CollectionConfig = {
 			label: 'Payment Received',
 			type: 'checkbox',
 			defaultValue: false,
-		},
-		{
-			name: 'warned',
-			type: 'checkbox',
-			admin: {
-				readOnly: true,
-			},
-		},
-		{
-			name: 'frozen',
-			type: 'checkbox',
-			admin: {
-				readOnly: true,
-			},
-		},
-		{
-			name: 'creationDate',
-			label: 'Creation Date',
-			type: 'date',
 		},
 		{
 			name: 'email',
@@ -78,4 +59,4 @@ const RegisteredUsers: CollectionConfig = {
 	],
 }
 
-export default RegisteredUsers
+export default FrozenUsers
