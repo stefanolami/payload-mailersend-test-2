@@ -12,6 +12,8 @@ import Tenders from './collections/Tenders'
 import Agents from './collections/Agents'
 import FrozenUsers from './collections/FrozenUsers'
 import notifyCronJob from './actions/notifyCronJob'
+import update from 'payload/dist/collections/operations/update'
+import warnFreezeCronJob from './actions/warnFreezeCronJob'
 
 export default buildConfig({
 	admin: {
@@ -20,10 +22,16 @@ export default buildConfig({
 	},
 	endpoints: [
 		{
-			path: '/notify-two-weeks',
+			path: '/notify',
 			method: 'get',
 			// @ts-ignore
 			handler: notifyCronJob,
+		},
+		{
+			path: '/warn-freeze-users',
+			method: 'get',
+			// @ts-ignore
+			handler: warnFreezeCronJob,
 		},
 	],
 	cors: '*',

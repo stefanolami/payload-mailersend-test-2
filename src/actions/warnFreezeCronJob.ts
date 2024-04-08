@@ -1,4 +1,5 @@
 import usersToStrings from './helpers/usersToStrings'
+import payload from 'payload';
 
 type Request = {
 	payload: {
@@ -48,7 +49,22 @@ const sendEmail = async (req: Request, res: Response, email: object) => {
 	}
 }
 
-const notifyCronJob = async (
+const setWarnUsers = async (req: Request, res: Response, next: NextFunction, users: any[]) => {
+	const promiseArray = users.map(user => {
+		return payload.update({
+			collection: 'registered-users',
+			id: user.id,
+			data: {
+				warned: true,
+			},
+		})
+	})
+	Promise.all(promiseArray).then((values) => {console.log(values)})
+}
+
+const setFreezeUsers = async (req: Request, res: Response, next: NextFunction, users: any[]) => {}
+
+const warnFreezeCronJob = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
@@ -90,19 +106,7 @@ const notifyCronJob = async (
 	console.log('Frozen users:', frozenUsers)
 	console.log('Remaining users:', remainingUsers)
 
-	/* const emailResult = await sendEmail(req, res, {
-		to: ['stefanolami90@gmail.com'],
-		from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
-		subject: 'Missing payments notification',
-		text: `the following users are about to be warned: ${usersToStrings(
-			warnings
-		)};
-the following users are about to be frozen: ${usersToStrings(freezing)};
-Users that have been warned: ${usersToStrings(warnedUsers)};
-Users still frozen: ${usersToStrings(frozenUsers)}.`,
-	}) */
-
-	const emailResult = await req.payload.sendEmail({
+	await sendEmail(req, res, {
 		to: ['stefanolami90@gmail.com'],
 		from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
 		subject: 'Missing payments notification',
@@ -113,10 +117,9 @@ the following users are about to be frozen: ${usersToStrings(freezing)};
 Users that have been warned: ${usersToStrings(warnedUsers)};
 Users still frozen: ${usersToStrings(frozenUsers)}.`,
 	})
-	console.log(emailResult)
 }
 
-export default notifyCronJob
+export default warnFreezeCronJob
 
 /* import usersToStrings from './helpers/usersToStrings'
 
