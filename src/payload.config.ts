@@ -12,7 +12,6 @@ import Tenders from './collections/Tenders'
 import Agents from './collections/Agents'
 import FrozenUsers from './collections/FrozenUsers'
 import notifyCronJob from './actions/notifyCronJob'
-import update from 'payload/dist/collections/operations/update'
 import warnFreezeCronJob from './actions/warnFreezeCronJob'
 
 export default buildConfig({

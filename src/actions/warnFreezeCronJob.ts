@@ -1,5 +1,5 @@
 import usersToStrings from './helpers/usersToStrings'
-import payload from 'payload';
+import payload from 'payload'
 
 type Request = {
 	payload: {
@@ -49,8 +49,8 @@ const sendEmail = async (req: Request, res: Response, email: object) => {
 	}
 }
 
-const setWarnUsers = async (req: Request, res: Response, next: NextFunction, users: any[]) => {
-	const promiseArray = users.map(user => {
+const setWarnUsers = async (users: any[]) => {
+	const promiseArray = users.map((user) => {
 		return payload.update({
 			collection: 'registered-users',
 			id: user.id,
@@ -59,10 +59,25 @@ const setWarnUsers = async (req: Request, res: Response, next: NextFunction, use
 			},
 		})
 	})
-	Promise.all(promiseArray).then((values) => {console.log(values)})
+	Promise.all(promiseArray).then((values) => {
+		console.log('warned users: ', values)
+	})
 }
 
-const setFreezeUsers = async (req: Request, res: Response, next: NextFunction, users: any[]) => {}
+const setFreezeUsers = async (users: any[]) => {
+	const promiseArray = users.map((user) => {
+		return payload.update({
+			collection: 'registered-users',
+			id: user.id,
+			data: {
+				frozen: true,
+			},
+		})
+	})
+	Promise.all(promiseArray).then((values) => {
+		console.log('frozen users: ', values)
+	})
+}
 
 const warnFreezeCronJob = async (
 	req: Request,
@@ -100,106 +115,14 @@ const warnFreezeCronJob = async (
 		}
 	})
 
-	console.log('Warnings:', warnings)
+	setWarnUsers(warnings)
+	setFreezeUsers(freezing)
+
+	/* console.log('Warnings:', warnings)
 	console.log('Freezing:', freezing)
 	console.log('Warned users:', warnedUsers)
 	console.log('Frozen users:', frozenUsers)
-	console.log('Remaining users:', remainingUsers)
-
-	await sendEmail(req, res, {
-		to: ['stefanolami90@gmail.com'],
-		from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
-		subject: 'Missing payments notification',
-		text: `the following users are about to be warned: ${usersToStrings(
-			warnings
-		)};
-the following users are about to be frozen: ${usersToStrings(freezing)};
-Users that have been warned: ${usersToStrings(warnedUsers)};
-Users still frozen: ${usersToStrings(frozenUsers)}.`,
-	})
+	console.log('Remaining users:', remainingUsers) */
 }
 
 export default warnFreezeCronJob
-
-/* import usersToStrings from './helpers/usersToStrings'
-
-const notifyCronJob = async (req, res, next) => {
-	const result = await req.payload.find({
-		collection: 'registered-users',
-		where: {
-			paymentReceived: {
-				not_equals: true,
-			},
-		},
-	})
-	const users = result.docs
-	const frozenUsers = users.filter((user) => user.frozen === true)
-	const warnedUsers = users.filter(
-		(user) => user.warned === true && user.frozen === false
-	)
-	const remainingUsers = users.filter((user) => !user.warned && !user.frozen)
-	let warnings = []
-	let freezing = []
-	const now = new Date()
-	const oneDay = 24 * 60 * 60 * 1000 // 1 day in milliseconds
-	const warningTime = 14 * oneDay
-	const freezingTime = 28 * oneDay
-	remainingUsers.forEach((user) => {
-		const creation = new Date(user.creationDate)
-		const timeDifference = now.getTime() - creation.getTime()
-		if (timeDifference > freezingTime) {
-			freezing.push(user)
-		} else if (timeDifference > warningTime) {
-			warnings.push(user)
-		}
-	})
-	console.log('Warnings:', warnings)
-	console.log('Freezing:', freezing)
-	console.log('Warned users:', warnedUsers)
-	console.log('Frozen users:', frozenUsers)
-	console.log('Remaining users:', remainingUsers)
-
-	let isSent = false
-	req.payload
-		.sendEmail({
-			to: ['fbsik@vuoidsh.com'],
-			from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
-			subject: 'Missing payments notification',
-			text: `the following users are about to be warned: ${usersToStrings(
-				warnings
-			)};
-the following users are about to be frozen: ${usersToStrings(freezing)};
-Users that have been warned: ${usersToStrings(warnedUsers)};
-Users still frozen: ${usersToStrings(frozenUsers)}.`,
-		})
-		.then((response: { accepted: string[]; rejected: string[] }) => {
-			// Add type assertion
-			console.log(response)
-			if (response.accepted?.length > 0) {
-				isSent = true
-			}
-			if (response.rejected?.length > 0) {
-				console.warn('Email rejected:', response.rejected)
-			}
-		})
-		.catch((error) => {
-			console.error('Error sending email:', error)
-			isSent = false
-		})
-		.finally(() => {
-			if (!isSent) {
-				req.payload.sendEmail({
-					to: ['stefanolami90@gmail.com'],
-					from: 'stefanolami@trial-pxkjn41187p4z781.mlsender.net',
-					subject: 'Error sending Missing payments notification',
-					text: `Error sending email`,
-				})
-				res.status(500).send('Error sending email')
-			} else if (isSent) {
-				res.status(200).send(`Email sent`)
-			}
-		})
-}
-
-export default notifyCronJob
- */
