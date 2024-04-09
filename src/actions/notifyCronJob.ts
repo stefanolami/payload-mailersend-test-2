@@ -69,17 +69,19 @@ const notifyCronJob = async (
 					not_equals: true,
 				},
 			},
+			limit: 1000,
 		})
 	)
 	if (result.error) {
 		console.log('Error quering payload: ', result.error)
 	}
-	let frozenUsers
-	let warnedUsers
-	let remainingUsers
+	let frozenUsers = []
+	let warnedUsers = []
+	let remainingUsers = []
 	if (result.data) {
 		const users = result.data.docs
 		frozenUsers = getFrozenUsers(users)
+		console.log(frozenUsers)
 		warnedUsers = getWarnedUsers(users)
 		remainingUsers = getRemainingUsers(users)
 	}
