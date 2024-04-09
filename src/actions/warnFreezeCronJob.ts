@@ -16,7 +16,7 @@ type NextFunction = () => void
 const getFrozenUsers = (users: any[]) =>
 	users.filter((user) => user.frozen === true)
 const getWarnedUsers = (users: any[]) =>
-	users.filter((user) => user.warned === true && user.frozen === false)
+	users.filter((user) => user.warned === true && !user.frozen)
 const getRemainingUsers = (users: any[]) =>
 	users.filter((user) => !user.warned && !user.frozen)
 
